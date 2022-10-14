@@ -96,6 +96,18 @@ if (GPU)
     message(STATUS "CUDA is found")
     enable_language(CUDA)
     target_sources(gpl PRIVATE src/gpuSolver.cu)
+
+    # use the header-only cusp library
+    if (NOT DEFINED CUSP_DIR)
+      message(FATAL_ERROR "No CUSP_DIR found")
+    endif()
+    set(CUSP_INCLUDE_DIRS ${CUSP_DIR})
+
+    target_include_directories(gpl
+      PRIVATE
+        ${CUDA_INCLUDE_DIRS}
+        ${CUSP_INCLUDE_DIRS}
+    )
     target_link_libraries(gpl
       PRIVATE
         ${CUDA_LIBRARIES}
